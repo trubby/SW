@@ -24,6 +24,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -252,6 +253,8 @@ public class Game {
     		vote = "basic";
     	}
     	
+    	HashMap<Integer, GameChest> gChests = new HashMap<>();
+    	
 		for (EmptyChest eChest: gameMap.getChests().values()) {
 			Location loc;
 			int x = eChest.getX();
@@ -260,7 +263,29 @@ public class Game {
 			loc = new Location (mapWorld, x, y, z);
 			Chest chest = (Chest) loc.getBlock().getState();
 			SkyWarsReloaded.getCC().populateChest(chest, vote);
+			
+			//-------------------------------
+			//EDITED BY TUB try to read sign
+			//-------------------------------
+			
+			Location signLoc = loc.clone().add(0, 1, 0);
+			Sign sign = (Sign) signLoc.getBlock().getState();
+			int id = Integer.parseInt(sign.getLine(0));
+			
+			if(gChests.containsKey(id)){
+				GameChest gChest = gChests.get(id);
+				gChest.chests.add(chest);
+			}else{
+				GameChest gChest = new GameChest();
+				gChests.put(id, gChest);
+				gChest.chests.add(chest);
+			}
+			
+			signLoc.getBlock().setType(Material.AIR);
+			
 		}
+		
+		
 		
 		for (EmptyChest eChest: gameMap.getDoubleChests().values()) {
 			Location loc;

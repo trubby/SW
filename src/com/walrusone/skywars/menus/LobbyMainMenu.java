@@ -160,7 +160,7 @@ public class LobbyMainMenu {
             SkyWarsReloaded.getIC().setOption(
     	                    gamePlayer.getP(),
     	                    35,
-    	                    new ItemStack(Material.TORCH, 1),
+    	                    new ItemStack(Material.IRON_DOOR, 1),
     	                    new Messaging.MessageFormatter().format("menu.exit-lobby-menu"),
     	                    loreList5.toArray(new String[loreList5.size()])); 
             

@@ -1,10 +1,13 @@
 package com.walrusone.skywars.listeners;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,6 +38,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.util.Vector;
 
 import com.walrusone.skywars.SkyWarsReloaded;
 import com.walrusone.skywars.game.Game;
@@ -233,6 +237,8 @@ public class PlayerListener implements Listener {
 		}
 	}
 	
+	ArrayList<UUID> queuedPlayer = new ArrayList<>();
+	
 	@EventHandler 
     public void onPlayerInteract(PlayerInteractEvent e) {
 		ItemStack item = e.getPlayer().getItemInHand();
@@ -242,14 +248,11 @@ public class PlayerListener implements Listener {
         if (gPlayer.inGame()) {
             if ((e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (item.getData().getItemType().equals(SkyWarsReloaded.getCfg().getKitMenuItem().getData().getItemType()) &&  item.getEnchantments().keySet().equals(SkyWarsReloaded.getCfg().getKitMenuItem().getEnchantments().keySet()))) {
         		if (gPlayer.getGame().getState() == GameState.PREGAME) {
-        			if (!gPlayer.hasKitSelected()) {
-        				if (SkyWarsReloaded.getCfg().kitsEnabled()) {
-        					new KitMenu(gPlayer);
-        				}
-        				e.setCancelled(true);
-        			} else {
-        				player.sendMessage(new Messaging.MessageFormatter().format("error.already-has-kit"));
-        			}
+        			//already-has-kit
+    				if (SkyWarsReloaded.getCfg().kitsEnabled()) {
+    					new KitMenu(gPlayer);
+    				}
+    				e.setCancelled(true);
         		}
             } else if ((e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) && (item.getData().getItemType().equals(SkyWarsReloaded.getCfg().getExitGameItem().getData().getItemType()) &&  item.getEnchantments().keySet().equals(SkyWarsReloaded.getCfg().getExitGameItem().getEnchantments().keySet()))) {			
             	if (gPlayer.getGame().getState() == GameState.PREGAME) {	
@@ -275,12 +278,39 @@ public class PlayerListener implements Listener {
         		if (SkyWarsReloaded.getCfg().pressurePlateJoin()) {
         			Location spawn = SkyWarsReloaded.getCfg().getSpawn();
         			if (spawn != null) {
+        				//AVOID DUP JOIN
+        				if(queuedPlayer.contains(e.getPlayer().getUniqueId())){
+        					return;
+        				}
+        				
         				if (!SkyWarsReloaded.getCfg().signJoinMode()) {
        	                	World world = spawn.getWorld(); 
        	                    if (!gPlayer.inGame() && player.getLocation().getWorld().equals(world)) {
        	                        Game game = SkyWarsReloaded.getGC().findGame();
+       	                        final Game goGame = game;
        	                        if (game != null) {
-       	                            game.addPlayer(gPlayer);
+       	                        	
+       	                        	//EDITED JUMP BY TUB
+       	                        	Bukkit.getScheduler().scheduleSyncDelayedTask(SkyWarsReloaded.get(), new Runnable() {
+										
+										@Override
+										public void run() {
+											e.getPlayer().setVelocity(new Vector(0, 2.0D, 0));
+										}
+									}, 1);
+       	                        	
+   	                    			queuedPlayer.add(e.getPlayer().getUniqueId());
+   	                    			Bukkit.getScheduler().scheduleSyncDelayedTask(SkyWarsReloaded.get(), new Runnable() {
+										
+										@Override
+										public void run() {
+											 goGame.addPlayer(gPlayer);
+											 queuedPlayer.remove(e.getPlayer().getUniqueId());
+											 // TODO Auto-generated method stub
+											
+										}
+									}, 25);
+       	                        	
        	                        } else {
        	                        	SkyWarsReloaded.getGC().addToQueue(gPlayer);
        	                        	gPlayer.getP().sendMessage(new Messaging.MessageFormatter().format("game.no-game-available"));
@@ -290,10 +320,27 @@ public class PlayerListener implements Listener {
            	    			World world = spawn.getWorld();
        	                    if (!gPlayer.inGame() && player.getLocation().getWorld().equals(world)) {
        	                		Game game = findGame();
+       	                		final Game goGame = game;
        	        	    		int i = 0;
        	        	    		while (i < 3) {
        	                    		if (game != null && game.getState() == GameState.PREGAME && !game.isFull()) {
-       	            	                game.addPlayer(gPlayer);
+       	                    			
+       	                    		//EDITED JUMP BY TUB
+           	                        	e.getPlayer().setVelocity(new Vector(0, 2.0D, 0));
+       	                    			queuedPlayer.add(e.getPlayer().getUniqueId());
+       	                    			Bukkit.getScheduler().scheduleSyncDelayedTask(SkyWarsReloaded.get(), new Runnable() {
+    										
+    										@Override
+    										public void run() {
+    											 goGame.addPlayer(gPlayer);
+    											 queuedPlayer.remove(e.getPlayer().getUniqueId());
+    											 // TODO Auto-generated method stub
+    											
+    										}
+    									}, 25);
+       	                    			
+       	                    			
+       	            	               
        	            	                break;
        	            	    		} else {
        	            	    			i++;
@@ -642,7 +689,9 @@ public class PlayerListener implements Listener {
 			}
 		}
 		if (SkyWarsReloaded.getCfg().giveJoinMenuItem()) {
+			if (p.hasPermission("swr.spectate")) {
 				p.getInventory().setItem(SkyWarsReloaded.getCfg().getJoinMenuSlot(), SkyWarsReloaded.getCfg().getJoinItem());
+			}
 		}
 		if (SkyWarsReloaded.getCfg().giveLobbyMenuItem()) {
 			p.getInventory().setItem(SkyWarsReloaded.getCfg().getLobbyMenuSlot(), SkyWarsReloaded.getCfg().getLobbyMenuItem());

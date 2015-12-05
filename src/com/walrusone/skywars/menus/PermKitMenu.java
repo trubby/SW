@@ -17,7 +17,7 @@ import com.walrusone.skywars.utilities.Messaging;
 public class PermKitMenu {
 
     private static final int menuSlotsPerRow = 9;
-    private static final int menuSize = 54;
+    private static final int menuSize = 45;
     private static final String menuName = new Messaging.MessageFormatter().format("menu.permkit-menu-title");
     private static final String premissionPrefix = "swr.kit.";
     
@@ -100,6 +100,18 @@ public class PermKitMenu {
             if (iii >= menuSize) {
                 break;
             }
+            
+          //EDITED SLOT BY TUB
+            int slot = iii + 11;
+            if(slot >= 16 && slot <= 19){
+            	slot = slot + 4;
+            }else if(slot >= 25 && slot <= 28){
+            	slot = slot + 4;
+            }else if(slot >= 34 && slot <= 37){
+            	slot = slot + 4;
+            }else if(slot >= 43 && slot <= 46){
+            	slot = slot + 4;
+            }
 
             GameKit kit = availableKits.get(iii);
             List<String> loreList = Lists.newLinkedList();
@@ -134,7 +146,7 @@ public class PermKitMenu {
 
                 SkyWarsReloaded.getIC().setOption(
                         gamePlayer.getP(),
-                        kit.getPosition(),
+                        /*kit.getPosition()*/slot,
                         kit.getIcon(),
                         "\247r\247" + (canPurchase ? 'a' : 'c') + kit.getKitName(),
                         loreList.toArray(new String[loreList.size()]));
@@ -144,8 +156,8 @@ public class PermKitMenu {
         List<String> loreList5 = Lists.newLinkedList();
         SkyWarsReloaded.getIC().setOption(
 	                    gamePlayer.getP(),
-	                    53,
-	                    new ItemStack(Material.TORCH, 1),
+	                    44,
+	                    new ItemStack(Material.IRON_DOOR, 1),
 	                    new Messaging.MessageFormatter().format("menu.return-to-lobbymenu"),
 	                    loreList5.toArray(new String[loreList5.size()])); 
         
@@ -164,6 +176,18 @@ public class PermKitMenu {
 	        for (int iii = 0; iii < availableKits.size(); iii ++) {
 	            if (iii >= menuSize) {
 	                break;
+	            }
+	            
+	            //EDITED SLOT BY TUB
+	            int slot = iii + 11;
+	            if(slot >= 16 && slot <= 19){
+	            	slot = slot + 4;
+	            }else if(slot >= 25 && slot <= 28){
+	            	slot = slot + 4;
+	            }else if(slot >= 34 && slot <= 37){
+	            	slot = slot + 4;
+	            }else if(slot >= 43 && slot <= 46){
+	            	slot = slot + 4;
 	            }
 
 	            GameKit kit = availableKits.get(iii);
@@ -199,7 +223,7 @@ public class PermKitMenu {
 
 	                SkyWarsReloaded.getIC().setOption(
 	                        gamePlayer.getP(),
-	                        kit.getPosition(),
+	                        slot,
 	                        kit.getIcon(),
 	                        "\247r\247" + (canPurchase ? 'a' : 'c') + kit.getKitName(),
 	                        loreList.toArray(new String[loreList.size()]));
@@ -208,8 +232,8 @@ public class PermKitMenu {
 	            List<String> loreList5 = Lists.newLinkedList();
 	            SkyWarsReloaded.getIC().setOption(
 	    	                    gamePlayer.getP(),
-	    	                    53,
-	    	                    new ItemStack(Material.TORCH, 1),
+	    	                    44,
+	    	                    new ItemStack(Material.IRON_DOOR, 1),
 	    	                    new Messaging.MessageFormatter().format("menu.return-to-lobbymenu"),
 	    	                    loreList5.toArray(new String[loreList5.size()]));  
 	        }

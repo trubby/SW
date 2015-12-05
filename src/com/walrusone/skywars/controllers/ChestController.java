@@ -24,11 +24,13 @@ public class ChestController {
     private final List<ChestItem> chestItemList = Lists.newArrayList();
     private final List<ChestItem> opChestItemList = Lists.newArrayList();
     private final List<ChestItem> basicChestItemList = Lists.newArrayList();
+    private final List<ChestItem> basicArmorList = Lists.newArrayList();
     private final Random random = new Random();
    
     private List<Integer> randomLoc = new ArrayList<Integer>();
     private List<Integer> randomDLoc = new ArrayList<Integer>();
 
+    private final List<ChestItem> armorItemList = Lists.newArrayList();
 
     public ChestController() {
         load();
@@ -63,6 +65,24 @@ public class ChestController {
                     
                     if (itemStack != null) {
                         chestItemList.add(new ChestItem(itemStack, chance));
+                    }
+                }
+            }
+            
+            armorItemList.clear();
+            //tub armor
+            if (storage.contains("item_tub.armor")) {
+                for (String item : storage.getStringList("item_tub.armor")) {
+                    List<String> itemData = new LinkedList<String>(Arrays.asList(item.split(" ")));
+
+                    int chance = Integer.parseInt(itemData.get(0));
+                    itemData.remove(itemData.get(0));
+                    
+                    ItemStack itemStack = ItemUtils.parseItem(itemData);
+                    
+                    
+                    if (itemStack != null) {
+                    	armorItemList.add(new ChestItem(itemStack, chance));
                     }
                 }
             }
@@ -119,11 +139,44 @@ public class ChestController {
                         basicChestItemList.add(new ChestItem(itemStack, chance));
                     }
                 }
+                //ARMOR READ
+                basicArmorList.clear();
+                
+                for (String item : storage.getStringList("armors")) {
+                    List<String> itemData = new LinkedList<String>(Arrays.asList(item.split(" ")));
+
+                    int chance = Integer.parseInt(itemData.get(0));
+                    itemData.remove(itemData.get(0));
+                    
+                    ItemStack itemStack = ItemUtils.parseItem(itemData);
+                    
+                    
+                    if (itemStack != null) {
+                    	basicArmorList.add(new ChestItem(itemStack, chance));
+                    }
+                }
             }
         }
         
     }
-
+    
+    public void testTub(Inventory inv){
+    	inv.clear();
+    	
+    	ArrayList<ItemStack> items = new ArrayList<>();
+    	boolean selectedFirst = false;
+    	
+    	while (selectedFirst) {
+    		for(ChestItem chestItem : armorItemList){
+        		if (random.nextInt(100) + 1 <= chestItem.getChance()) {
+                    inv.setItem(random.nextInt(inv.getSize()), chestItem.getItem());
+                    selectedFirst = true;
+                    break;
+                }
+        	}
+		}
+    }
+    
     public void populateChest(Chest chest, String chestfile) {
     	if (chestfile.equalsIgnoreCase("op")) {
     		Inventory inventory = chest.getBlockInventory();
@@ -142,6 +195,10 @@ public class ChestController {
     	} else if (chestfile.equalsIgnoreCase("basic")) {
     		Inventory inventory = chest.getBlockInventory();
     		inventory.clear();
+    		
+    		//Armor
+    		
+    		
             int added = 0;
             Collections.shuffle(randomLoc);
 

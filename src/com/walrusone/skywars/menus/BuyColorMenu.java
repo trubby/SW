@@ -19,7 +19,7 @@ import com.walrusone.skywars.utilities.Messaging;
 public class BuyColorMenu {
 
     private static final int menuSlotsPerRow = 9;
-    private static final int menuSize = 36;
+    private static final int menuSize = 54;
     private static final String menuName = new Messaging.MessageFormatter().format("menu.buycolor-menu-title");
     private static final String premissionPrefix = "swr.colorglass.";
     
@@ -27,7 +27,7 @@ public class BuyColorMenu {
         List<GlassColor> availableItems = SkyWarsReloaded.getGLC().getColorItems();
 
         int rowCount = menuSlotsPerRow;
-        while (rowCount < 36 && rowCount < menuSize) {
+        while (rowCount < 54 && rowCount < menuSize) {
             rowCount += menuSlotsPerRow;
         }
 
@@ -83,11 +83,23 @@ public class BuyColorMenu {
             }
         });
 
-        ArrayList<Integer> placement = new ArrayList<Integer>(Arrays.asList(0, 2, 4, 6, 8, 9, 11, 13, 15, 17, 18, 20, 22, 24, 26, 27));
+        //ArrayList<Integer> placement = new ArrayList<Integer>(Arrays.asList(0, 2, 4, 6, 8, 9, 11, 13, 15, 17, 18, 20, 22, 24, 26, 27));
         
         for (int iii = 0; iii < availableItems.size(); iii ++) {
             if (iii >= menuSize) {
                 break;
+            }
+            
+            //EDITED SLOT BY TUB
+            int slot = iii + 11;
+            if(slot >= 16 && slot <= 19){
+            	slot = slot + 4;
+            }else if(slot >= 25 && slot <= 28){
+            	slot = slot + 4;
+            }else if(slot >= 34 && slot <= 37){
+            	slot = slot + 4;
+            }else if(slot >= 43 && slot <= 46){
+            	slot = slot + 4;
             }
 
             GlassColor glass = availableItems.get(iii);
@@ -108,7 +120,7 @@ public class BuyColorMenu {
                     if (gamePlayer.getP() != null) {
                         SkyWarsReloaded.getIC().setOption(
                                 gamePlayer.getP(),
-                                placement.get(iii),
+                                /*placement.get(iii)*/slot,
                                 glass.getItem().clone(),
                                 glass.getName(),
                                 loreList.toArray(new String[loreList.size()]));
@@ -120,8 +132,8 @@ public class BuyColorMenu {
         List<String> loreList5 = Lists.newLinkedList();
         SkyWarsReloaded.getIC().setOption(
 	                    gamePlayer.getP(),
-	                    35,
-	                    new ItemStack(Material.TORCH, 1),
+	                    53,
+	                    new ItemStack(Material.IRON_DOOR, 1),
 	                    new Messaging.MessageFormatter().format("menu.return-to-lobbymenu"),
 	                    loreList5.toArray(new String[loreList5.size()])); 
         
@@ -173,8 +185,8 @@ public class BuyColorMenu {
 	        List<String> loreList5 = Lists.newLinkedList();
 	        SkyWarsReloaded.getIC().setOption(
 		                    gamePlayer.getP(),
-		                    35,
-		                    new ItemStack(Material.TORCH, 1),
+		                    53,
+		                    new ItemStack(Material.IRON_DOOR, 1),
 		                    new Messaging.MessageFormatter().format("menu.return-to-lobbymenu"),
 		                    loreList5.toArray(new String[loreList5.size()])); 
 	        if (gamePlayer.getP() != null) {

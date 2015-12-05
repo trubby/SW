@@ -144,12 +144,12 @@ gameItems:
   lobbyMenuItemSlot: 4
   giveJoinItem: true
   joinItemSlot: 8
-  lobbyMenuItem: eye_of_ender 1 luck:1
-  spectateItem: compass 1 luck:1
-  joinItem: daylight_detector 1 luck:1
+  lobbyMenuItem: emerald 1 luck:1
+  spectateItem: air 1
+  joinItem: air 1
   exitGameItem: iron_door 1 luck:1
   exitItemSlot: 8
-  kitMenuItem: storage_minecart 1 luck:1
+  kitMenuItem: iron_sword 1 luck:1
   kitMenuItemSlot: 0
   kitPermMenuItem: storage_minecart 1
   kitPermMenuItemSlot: 2 

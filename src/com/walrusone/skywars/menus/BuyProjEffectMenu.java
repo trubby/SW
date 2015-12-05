@@ -1,7 +1,5 @@
 package com.walrusone.skywars.menus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -83,11 +81,21 @@ public class BuyProjEffectMenu {
             }
         });
 
-        ArrayList<Integer> placement = new ArrayList<Integer>(Arrays.asList(0, 2, 4, 6, 8, 9, 11, 13, 15, 17, 18, 20, 22, 24, 26, 27, 29, 31, 33, 35));
-		
         for (int iii = 0; iii < availableItems.size(); iii ++) {
             if (iii >= menuSize) {
                 break;
+            }
+            
+            //EDITED SLOT BY TUB
+            int slot = iii + 11;
+            if(slot >= 16 && slot <= 19){
+            	slot = slot + 4;
+            }else if(slot >= 25 && slot <= 28){
+            	slot = slot + 4;
+            }else if(slot >= 34 && slot <= 37){
+            	slot = slot + 4;
+            }else if(slot >= 43 && slot <= 46){
+            	slot = slot + 4;
             }
 
             ParticleItem effect = availableItems.get(iii);
@@ -108,7 +116,7 @@ public class BuyProjEffectMenu {
                     if (gamePlayer.getP() != null) {
                         SkyWarsReloaded.getIC().setOption(
                                 gamePlayer.getP(),
-                                placement.get(iii),
+                                slot,
                                 SkyWarsReloaded.getCfg().getTrailEffectsMenuItem(),
                                 effect.getName(),
                                 loreList.toArray(new String[loreList.size()]));
@@ -121,7 +129,7 @@ public class BuyProjEffectMenu {
         SkyWarsReloaded.getIC().setOption(
 	                    gamePlayer.getP(),
 	                    44,
-	                    new ItemStack(Material.TORCH, 1),
+	                    new ItemStack(Material.IRON_DOOR, 1),
 	                    new Messaging.MessageFormatter().format("menu.return-to-lobbymenu"),
 	                    loreList5.toArray(new String[loreList5.size()])); 
         
@@ -136,11 +144,22 @@ public class BuyProjEffectMenu {
 			return;
 		} else {
 	        List<ParticleItem> availableItems = SkyWarsReloaded.getProjC().getParticleItems();
-	        ArrayList<Integer> placement = new ArrayList<Integer>(Arrays.asList(0, 2, 4, 6, 8, 9, 11, 13, 15, 17, 18, 20, 22, 24, 26, 27, 29, 31, 33, 35));
 			
 	        for (int iii = 0; iii < availableItems.size(); iii ++) {
 	            if (iii >= menuSize) {
 	                break;
+	            }
+	            
+	          //EDITED SLOT BY TUB
+	            int slot = iii + 11;
+	            if(slot >= 16 && slot <= 19){
+	            	slot = slot + 4;
+	            }else if(slot >= 25 && slot <= 28){
+	            	slot = slot + 4;
+	            }else if(slot >= 34 && slot <= 37){
+	            	slot = slot + 4;
+	            }else if(slot >= 43 && slot <= 46){
+	            	slot = slot + 4;
 	            }
 
 	            ParticleItem effect = availableItems.get(iii);
@@ -161,7 +180,7 @@ public class BuyProjEffectMenu {
 	                    if (gamePlayer.getP() != null) {
 	                        SkyWarsReloaded.getIC().setOption(
 	                                gamePlayer.getP(),
-	                                placement.get(iii),
+	                                slot,
 	                                SkyWarsReloaded.getCfg().getTrailEffectsMenuItem(),
 	                                effect.getName(),
 	                                loreList.toArray(new String[loreList.size()]));
@@ -174,7 +193,7 @@ public class BuyProjEffectMenu {
 	        SkyWarsReloaded.getIC().setOption(
 		                    gamePlayer.getP(),
 		                    44,
-		                    new ItemStack(Material.TORCH, 1),
+		                    new ItemStack(Material.IRON_DOOR, 1),
 		                    new Messaging.MessageFormatter().format("menu.return-to-lobbymenu"),
 		                    loreList5.toArray(new String[loreList5.size()])); 
 	        

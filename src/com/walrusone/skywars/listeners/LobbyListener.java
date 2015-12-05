@@ -1,11 +1,14 @@
 package com.walrusone.skywars.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -13,10 +16,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.Inventory;
 
 import com.walrusone.skywars.SkyWarsReloaded;
 
@@ -156,7 +162,9 @@ public class LobbyListener implements Listener {
 			}
 		}
 		if (SkyWarsReloaded.getCfg().giveJoinMenuItem()) {
+			if (p.hasPermission("swr.spectate")) {
 				p.getInventory().setItem(SkyWarsReloaded.getCfg().getJoinMenuSlot(), SkyWarsReloaded.getCfg().getJoinItem());
+			}
 		}
 		if (SkyWarsReloaded.getCfg().giveLobbyMenuItem()) {
 			p.getInventory().setItem(SkyWarsReloaded.getCfg().getLobbyMenuSlot(), SkyWarsReloaded.getCfg().getLobbyMenuItem());
@@ -214,6 +222,19 @@ public class LobbyListener implements Listener {
 	
 	public boolean hasIgnorePermission(Player player) {
 		return player.isOp() || player.hasPermission("swr.ignoreLobbyGuard");
+	}
+	
+	//tubtest
+	@EventHandler
+	public void onChestOpen(PlayerInteractEvent e){
+		if(e.getAction() == Action.LEFT_CLICK_BLOCK){
+			if(e.getPlayer().getItemInHand().getType() == Material.APPLE){
+				Inventory inv = Bukkit.createInventory(e.getPlayer(), 45);
+				
+				SkyWarsReloaded.getCC().testTub(inv);
+				e.getPlayer().openInventory(inv);
+			}
+		}
 	}
     
 }
